@@ -33,6 +33,7 @@ body {
 }
 
 .buttons {
+  width: 100%;
   padding-top: 15px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -42,11 +43,12 @@ body {
 
 .clear {
   grid-column: span 2;
+  width: 100%;
 }
 
 .equal {
   grid-column: span 2;
-
+width: 100%;
 }
 
 button {
