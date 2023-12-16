@@ -28,7 +28,7 @@ const priority = (operator: string): number => {
 
 const App = () => {
   const [expression, setExpression] = useState<string>("");
-  const [result, setResult] = useState<string>("");
+  const [currentExpression, setCurrentExpression] = useState("");
   const [history, setHistory] = useState<string[]>([]);
 
   const digit = (value: string): void => {
@@ -39,7 +39,7 @@ const App = () => {
     setExpression("");
   };
 
-  const resolve = (expression: string): void => {
+  const resolve = (expression: string) => {
     const numbers: number[] = [];
     const operators: string[] = [];
     for (let i = 0; i < expression.length; i++) {
@@ -70,8 +70,34 @@ const App = () => {
           numbers.push(calculate(operator, num1, num2));
         }
       }
+
+      if(char === ")"){
+        while(operators[operators.length - 1] !== "("){
+          const num1 = numbers.pop()!;
+          const num2 = numbers.pop()!;
+          const operator = operators.pop()!;
+          numbers.push(calculate(operator, num1, num2));
+        }
+        operators.pop();
+      }
+
+      while (operators.length > 0) {
+        const num1 = numbers.pop()!;
+        const num2 = numbers.pop()!;
+        const operator = operators.pop()!;
+        numbers.push(calculate(operator, num1, num2));
+      }
+
+      const result = numbers.pop();
+      return result !== undefined ? result.toString() : "Error";
     }
   };
+
+  const handleCalculate = () => {
+    const result = resolve(expression);
+    setCurrentExpression(result);
+    setHistory([...history, `${expression} = ${result}`]);
+  }
 
   return (
     <>
@@ -86,7 +112,7 @@ const App = () => {
           <button className="clear" onClick={clearDisplay}>
             Limpar
           </button>
-          <button className="equal" onClick={resolve}>
+          <button className="equal" onClick={handleCalculate}>
             Calcular
           </button>
         </div>
