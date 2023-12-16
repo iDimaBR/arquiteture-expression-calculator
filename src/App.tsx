@@ -41,8 +41,15 @@ const App = () => {
 
   const resolve = (expression: string): void => {
     const numbers: number[] = [];
-    const operators: string[] = [];
-     // TO DO
+    for (let i = 0; i < expression.length; i++) {
+      const char = expression[i];
+      if (char === " ") continue;
+
+      const num = Number(char);
+      if (!isNaN(num)) {
+        numbers.push(num);
+        continue;
+      }
     }
   };
 
