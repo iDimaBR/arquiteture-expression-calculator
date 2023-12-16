@@ -41,6 +41,7 @@ const App = () => {
 
   const resolve = (expression: string): void => {
     const numbers: number[] = [];
+    const operators: string[] = [];
     for (let i = 0; i < expression.length; i++) {
       const char = expression[i];
       if (char === " ") continue;
@@ -49,6 +50,25 @@ const App = () => {
       if (!isNaN(num)) {
         numbers.push(num);
         continue;
+      }
+
+      if (char === "(") {
+        operators.push(char);
+        continue;
+      }
+
+      if (["+", "-", "*", "/"].includes(char)) {
+        if (operators.length == 0) {
+          operators.push(char);
+          continue;
+        }
+
+        while (operators.length > 0 && priority(char) <= priority(operators[operators.length - 1])) {
+          const num1 = numbers.pop()!;
+          const num2 = numbers.pop()!;
+          const operator = operators.pop()!;
+          numbers.push(calculate(operator, num1, num2));
+        }
       }
     }
   };
